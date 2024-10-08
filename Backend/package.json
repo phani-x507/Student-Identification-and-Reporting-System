@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "mongoose": "^8.7.0",
+    "nodemon": "^3.1.7"
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Student Recognition and Reporting System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server":"nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phani-x507/Student-Identification-and-Reporting-System.git"
+  },
+  "author": "The Revenger X507",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phani-x507/Student-Identification-and-Reporting-System/issues"
+  },
+  "homepage": "https://github.com/phani-x507/Student-Identification-and-Reporting-System#readme"
+}
