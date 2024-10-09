@@ -55,6 +55,11 @@ body{
   margin-top: 10px;
 }
 
+.sidebar{
+  box-shadow: 0px 5px 15px 1px #e1e1e2  ;
+  background-color: #d2daff  ;
+  border-radius: 20px;
+}
 .custom_alert p {
   font-size: 15px;
   font-weight: 400;
@@ -75,7 +80,7 @@ body{
   font-size: 36px;
 }
 .enable_shadows{
-  box-shadow: 0px 0px 20px 1px #d8d8d8      ;
+  box-shadow: 0px 8px 20px 1px #d8d8d8      ;
 }
 input[type=checkbox]{
   accent-color: green;

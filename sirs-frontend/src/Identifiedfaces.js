@@ -53,7 +53,7 @@ function Identifiedfaces() {
                 <Top_bar page="Identified Faces" />
             </div>
             <div style={{ 'display': 'flex', 'height': '91vh', 'background-color': '#fff' }}>
-                <div className='container w-25 p-3 ' style={{ 'min-height': "500px", 'background-color': '#060060' }}>
+                <div className='sidebar container w-25 p-3 ' style={{ 'min-height': "500px" }}>
                     <Sidebar data={loc} />
                 </div>
                 <div className='container w-50 p-3 ' style={{ 'min-height': "500px" }}>
@@ -76,7 +76,7 @@ function Identifiedfaces() {
                     </div>
 
                 </div>
-                <div className='container w-25 p3  '>
+                <div className='container w-25 p3 enable_shadows '>
                     <Alerts />
                 </div>
             </div>

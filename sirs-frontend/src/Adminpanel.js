@@ -17,14 +17,14 @@ function Adminpanel() {
         <div className='container-fluid w-100 ' style={{'background-color':'#060041','min-height':'8vh'}} >
             <Top_bar page="Dashboard" />
         </div>
-        <div style={{'display':'flex','height':'91vh','background-color':'#fff'}}>
-            <div className='container w-25 p-3 ' style={{'min-height':"500px",'background-color':'#060060'}}>
+        <div className=' border' style={{'display':'flex','height':'91vh','background-color':'#fff'}}>
+            <div className='sidebar container w-25 p-3 ' style={{'min-height':"500px",color:'black'}}>
             <Sidebar data={data} />
             </div>
             <div className='container w-50 p-3 ' style={{'min-height':"500px"}}>
                 <Stats />
             </div>
-            <div className='container w-25 p3  '>
+            <div className='container w-25 p3 border overflow-scroll  enable_shadows '>
             <Alerts />
             </div>
         </div>

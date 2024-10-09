@@ -11,7 +11,7 @@ function Sidebar(props) {
     const fullname = props.data.state.fullname
     const id = props.data.state.userid
     return (
-        <div style={{ color: 'white' }}>
+        <div className='border' style={{ color: 'black' }}>
             <div  >
                 <center><img className='mt-4' src='images/pimg.png' height='100px' /></center>
                 <p className='m-3 mb-0 mx-4' style={{ 'font-size': '20px' }}>Welcome</p>
