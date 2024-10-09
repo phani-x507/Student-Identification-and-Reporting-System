@@ -6,6 +6,7 @@ from flask_mysqldb import MySQL
 from flask_cors import CORS
 import MySQLdb.cursors
 from werkzeug.utils import secure_filename
+import base64
 import os
 import io
 app = Flask(__name__)
@@ -67,8 +68,15 @@ def find_face(val):
   db_path = "C:/Users/offic/OneDrive/Documents/GitHub/Student-Identification-and-Reporting-System/Backend/Faces",
   
 )
-    
+
+
     return dfs
+
+def convert_base64(path):
+    with open(path, 'rb') as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+        base64EncodedString = "data:image/jpeg;base64,"+encoded_string
+    return base64EncodedString
 
 # Uploading files
 @app.route('/upload_file',methods=['GET','POST'])
@@ -86,6 +94,8 @@ def up_file():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
+        image = convert_base64(filepath)
+
         res = find_face(filepath)
 
         # Converting the list into pandas dataframe  
@@ -102,14 +112,58 @@ def up_file():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # execute function is used to execute the query
-        cursor.execute("INSERT INTO `history`(`student_id`) VALUES ('{0}')".format(
-                    name[0]))
+        cursor.execute("INSERT INTO `history`(`student_id`,`image`) VALUES ('{0}','{1}')".format(
+                    name[0].split('_')[0],image))
         
         # Commit is mandatory to make the change in database
         mysql.connection.commit()
         print(name[0])
         return jsonify({"msg":'Face is Successfully saved'})
     return jsonify({"error": "File type not allowed"}), 400
+
+
+def verify_session(userid):
+    s_userid = session['userid']
+    if s_userid == userid:
+        return True
+    else:
+        return False
+
+def authenticate(uname,password):
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(f'select * from `users` where `username` = "{uname}"  and `password` ="{password}" ')
+    users_val = cursor.fetchone()
+    return users_val
+
+
+
+@app.route('/login',methods=['GET','POST'])
+def login_sirs():
+    if request.method =='POST':
+        data = request.json
+        uname = data['uname']
+        password = data['pass']
+        res = authenticate(uname,password)
+        if res:
+            session['fullname'] = res['fullname']
+            session['role'] = res['role']
+            session['userid'] = res['user_id']
+            return jsonify({'msg':"Authentication Successfull","userid":f"{session['userid']}","fullname":f"{session['fullname']}"})
+        else:
+            return jsonify({'msg':"Details not Found "})
+        
+    return jsonify({'msg':"Details Not sent"})
+
+
+
+@app.route('/get_faces',methods=['GET','POST'])
+def get_faces():
+    if request.method =="POST":
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM `people_db` INNER JOIN `history` WHERE `people_db`.`student_id` = `history`.`student_id`; ')
+        identified_data = cursor.fetchall()
+        print(identified_data)
+        return jsonify(identified_data)
 
 
 @app.route('/recognize',methods=['GET','POST'])
@@ -133,7 +187,7 @@ def upload_face():
 
         # execute function is used to execute the query
         cursor.execute("INSERT INTO `history`(`student_id`) VALUES ('{0}')".format(
-                    name[0]))
+                    name[0].split('_')[0]))
         
         # Commit is mandatory to make the change in database
         mysql.connection.commit()

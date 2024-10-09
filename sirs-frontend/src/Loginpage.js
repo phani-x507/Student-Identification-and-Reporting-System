@@ -9,15 +9,19 @@ function Loginpage() {
   const [pass,setPass] =  useState("");
   const history = useNavigate();
 
-
   const  login_handler = async (e) =>{
     e.preventDefault()
     try{
-      await axios.post('http://localhost:3500/login_user',{
+      await axios.post('http://localhost:5000/login',{
         uname,pass
-      }).then(res => console.log(res.data))
-    }catch(e){
+      }).then(res => {
+        const user = res.data
+        localStorage.setItem('userid',user)
+        history('/adminpanel', {state:user})
+      })
 
+    }catch(e){
+      console.log(e)
     }
   }
 

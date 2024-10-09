@@ -1,15 +1,31 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Domine:wght@400..700&family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 body{
+  
   font-family: 'Rubik', sans-serif;
-  background-image: url("https://static.vecteezy.com/system/resources/previews/006/316/976/original/simple-presentation-background-vector.jpg");
+  /* background-image: url("https://static.vecteezy.com/system/resources/previews/006/316/976/original/simple-presentation-background-vector.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  padding: 0; */
 }
 
 .login_main{
   border: 1px solid transparent;
 
+}
+
+.sidebar_buttons{
+  background-color: #140446;
+  border: 1px solid transparent;
+  color: white;
+  height: 50px;
+  margin:2px 0px;
+  transition-duration: 0.2s;
+}
+.sidebar_buttons:hover{
+  background-color: #fff;
+  color: black;
+  border: 1px solid lightgrey;
 }
 
 .textbox1{
@@ -22,6 +38,41 @@ body{
   border-radius: 5px;
   outline-color: #c7094f;
   outline-offset: 5px;
+}
+
+.custom_alert{
+  background-color: lightcoral;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 1px lavender;
+  border:1px solid transparent  ;
+  margin-top: 2px;
+}
+
+.id_cards{
+  box-shadow: 0px 5px 10px 1px lightgrey;
+  margin: 5px;
+  margin-top: 10px;
+}
+
+.custom_alert p {
+  font-size: 15px;
+  font-weight: 400;
+  margin: 2px;
+  
+}
+.stats_card{
+  font-size: 14px;
+  width:145px;height:145px;padding:5px
+}
+
+.stats_card div{
+  width:90%;height:100px;background-color:lavender;
+  border-radius: 30px;
+  margin: auto;
+}
+.stats_card h1{
+  font-size: 36px;
 }
 .enable_shadows{
   box-shadow: 0px 0px 20px 1px #d8d8d8      ;
