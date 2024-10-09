@@ -13,12 +13,12 @@ function Sidebar(props) {
     return (
         <div className='border' style={{ color: 'black' }}>
             <div  >
-                <center><img className='mt-4' src='images/pimg.png' height='100px' /></center>
+                <center><img className='mt-4 ' src='images/pimg.png' height='100px' /></center>
                 <p className='m-3 mb-0 mx-4' style={{ 'font-size': '20px' }}>Welcome</p>
                 <p className=' text-center'>Mr.<b> {fullname}</b></p>
                 <button className='w-100 sidebar_buttons' onClick={()=>{his('/adminpanel',{state:props.data.state})}}>Dashboard</button>
                 <button className='w-100 sidebar_buttons' onClick={()=>{his('/identifiedfaces',{state:props.data.state})}} >Identified Faces</button>
-                <button className='w-100 sidebar_buttons' onClick={()=>{his('/unidentifiedfaces')}}>Unidentified Faces</button>
+                <button className='w-100 sidebar_buttons' onClick={()=>{his('/unidentifiedfaces',{state:props.data.state})}}>Unidentified Faces</button>
                 <button className='w-100 sidebar_buttons' onClick={()=>{his('/history')}}>History</button>
                 <button className='w-100 sidebar_buttons'>Echo</button>
 

@@ -9,9 +9,8 @@ import { useLocation } from 'react-router-dom';
 
 
 function Adminpanel() {
-
-   const data = useLocation()
-
+    const data = useLocation()
+    
   return (
     <div className='container-fluid m-0 p-0' >
         <div className='container-fluid w-100 ' style={{'background-color':'#060041','min-height':'8vh'}} >

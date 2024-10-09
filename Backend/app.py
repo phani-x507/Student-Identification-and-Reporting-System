@@ -43,7 +43,7 @@ def allowed_file(filename):
 
 @app.route('/test1',methods =['GET','POST'])
 def test1():
-    print("ok")
+    
     return "<h1>Hello</h1>"
 
 @app.route('/test_connection',methods=['GET','POST'])
@@ -72,6 +72,23 @@ def find_face(val):
 
     return dfs
 
+def analyze_face(val):
+    objs = DeepFace.analyze(
+    img_path = val, 
+    actions = ['age', 'gender', 'race', 'emotion'],
+    )
+    return objs
+
+@app.route('/mark_seen', methods=['GET','POST'])
+def mark_sceen():
+    if request.method =='POST':
+        data = request.json
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute("UPDATE `history` SET `seen`='1' WHERE `h_id` = '{0}' ".format(data['id']))
+        mysql.connection.commit()
+
+        return jsonify({'msg':"Marked as Seen Successful"})
+
 def convert_base64(path):
     with open(path, 'rb') as image_file:
         encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
@@ -95,15 +112,24 @@ def up_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         image = convert_base64(filepath)
+        try:
+            res = find_face(filepath)
+            # Converting the list into pandas dataframe  
+            rdef = pd.DataFrame(res[0])
+            # taking the first value of first column and splitting using \\
+            person_img_path = rdef['identity'][0].split("\\")
+            # Finally splitting using "." for seperation of name and extension
+            name = person_img_path[1].split(".")
+        except:
+            cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
-        res = find_face(filepath)
-
-        # Converting the list into pandas dataframe  
-        rdef = pd.DataFrame(res[0])
-        # taking the first value of first column and splitting using \\
-        person_img_path = rdef['identity'][0].split("\\")
-        # Finally splitting using "." for seperation of name and extension
-        name = person_img_path[1].split(".")
+        # execute function is used to execute the query
+        
+            cursor.execute("INSERT INTO `unidentified_db`(`image`) VALUES ('{0}')".format(
+                        image))
+            
+            mysql.connection.commit()
+            return jsonify({'msg':'Not found in Database'})
 
         # This method is called for testing the connections
         test_connection()
@@ -112,15 +138,33 @@ def up_file():
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
 
         # execute function is used to execute the query
-        cursor.execute("INSERT INTO `history`(`student_id`,`image`) VALUES ('{0}','{1}')".format(
-                    name[0].split('_')[0],image))
         
-        # Commit is mandatory to make the change in database
+        cursor.execute("INSERT INTO `history`(`student_id`,`image`) VALUES ('{0}','{1}')".format(
+                        name[0].split('_')[0],image))
+            
+            # Commit is mandatory to make the change in database
         mysql.connection.commit()
-        print(name[0])
+        
         return jsonify({"msg":'Face is Successfully saved'})
     return jsonify({"error": "File type not allowed"}), 400
 
+@app.route('/getstats',methods=['GET','POST'])
+def stats():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT COUNT(student_id) FROM history UNION ALL SELECT COUNT(student_id) FROM people_db UNION ALL SELECT COUNT(image) FROM unidentified_db UNION ALL SELECT COUNT(DISTINCT(to_id)) FROM conv_hist")
+    res = cursor.fetchall()
+    stat_count = []
+
+    for i in res:
+        stat_count.append(i['COUNT(student_id)'])
+    print(stat_count)
+    stats_dict = ({
+        'identified_faces':stat_count[0],
+         'enrolled_faces':stat_count[1],
+        'unidentified_faces':stat_count[2],
+        'conv_count':stat_count[3]
+     })
+    return jsonify(stats_dict)
 
 def verify_session(userid):
     s_userid = session['userid']
@@ -159,12 +203,20 @@ def login_sirs():
 @app.route('/get_faces',methods=['GET','POST'])
 def get_faces():
     if request.method =="POST":
+        data = request.json
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM `people_db` INNER JOIN `history` WHERE `people_db`.`student_id` = `history`.`student_id`; ')
+        cursor.execute('SELECT * FROM `people_db` INNER JOIN `history` WHERE `people_db`.`student_id` = `history`.`student_id` AND `seen` = {} '.format(data['seen']))
         identified_data = cursor.fetchall()
-        print(identified_data)
+
         return jsonify(identified_data)
 
+@app.route('/get_ufaces',methods=['GET','POST'])
+def get_ufaces():
+    if request.method =='POST':
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * from `unidentified_db`')
+        res = cursor.fetchall()
+        return jsonify(res)
 
 @app.route('/recognize',methods=['GET','POST'])
 def upload_face():

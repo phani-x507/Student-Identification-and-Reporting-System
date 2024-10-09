@@ -12,8 +12,22 @@ function Getdetails() {
     const loc = useLocation()
     const data = {state : loc.state.user}
     const person = loc.state.person
+    const [seen_res,setSeen] = useState("")
+    const id  = loc.state.person['h_id']
     console.log(loc.state.person)
 
+   
+        const mark_seen = async ()=>{
+             try{
+            const res = await axios.post('http://localhost:5000/mark_seen',{
+                id
+            }).then(res => setSeen(res.data['msg']))
+        }catch(e){
+
+        }
+                
+        }
+        console.log(seen_res)
 
   return (
     <div className='container-fluid m-0 p-0' >
@@ -31,8 +45,8 @@ function Getdetails() {
                 <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Field</th>
-                <th>Answer</th>
+                <th>Parameters</th>
+                <th>Response</th>
             </tr>
         </thead>
         <tbody>
@@ -106,6 +120,8 @@ function Getdetails() {
             </div>
             <div className='container w-25 p3  '>
             <center className='mt-4'><img style={{height:'250px','border-radius':'30px','boxShadow':'0px 10px 15px 1px #bebfc2  '}} src={person['image']}></img></center>
+            <center><button className='btn btn-success m-4' onClick={() => mark_seen() } >Mark as Seen</button></center>
+            <center><p className='lead'>{seen_res}</p></center>
             </div>
         </div>
     </div>

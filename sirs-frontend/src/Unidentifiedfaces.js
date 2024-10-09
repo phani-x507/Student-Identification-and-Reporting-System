@@ -7,7 +7,7 @@ import Alerts from './Alerts';
 import axios from 'axios'
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function Identifiedfaces() {
+function Unidentifiedfaces() {
     const loc = useLocation()
     const data = loc
     const userid = loc.state.userid
@@ -21,35 +21,21 @@ function Identifiedfaces() {
 
     const style1 = {
         'div1': { 'width': 'auto', 'border-radius': '20px', 'display': 'flex' },
-        'div1_class':'container m-2 border p-2 id_cards',
         'img': { 'width': '50px', 'border-radius': '30px' },
         'p': { 'font-size': '13px' },
         'btn_text': '',
         'btn_style': { 'background-color': 'transparent', 'border': '0px solid transparent' },
         'img_display': { 'display': 'block', 'height': '30px' }
     }
-    
+
     const style2 = {
-        'div1': {  'width': '200px',borderRadius:'20px'},
-        'div1_class':'container m-1 border p-2 id_cards',
-        'img': { 'width': '140px', 'border-radius': '30px','margin-top':'15px' },
+        'div1': { 'width': '200px' },
+        'img': { 'width': '150px', 'border-radius': '30px', 'margin-top': '15px' },
         'p': { 'font-size': '13px' },
         'btn_text': 'Get Details',
-        'btn_style': { },
-        'img_display': { 'display': 'None'}
+        'btn_style': {},
+        'img_display': { 'display': 'None' }
     }
-    const style3 = {
-        'div1': { 'width': '100%', 'border-radius': '20px', 'display': 'flex', 'justify-content':'space-around','margin':'2px'},
-        'div1_class':'container border p-2 id_cards',
-        'img': { 'width': '30px', 'border-radius': '30px' },
-        'p': { 'font-size': '11px' },
-        'btn_text': '',
-        'btn_style': { 'background-color': 'transparent', 'border': '0px solid transparent',height:'20px',margin:'0px',padding:'0px' },
-        'img_display': { 'display': 'block', 'height': '20px' },
-        'div2':{'display':'flex'}
-    }
-    
-
 
 
 
@@ -72,8 +58,8 @@ function Identifiedfaces() {
         const faces = async () => {
             const seen = 0;
             try {
-                const res = await axios.post('http://localhost:5000/get_faces', {
-                    seen,
+                const res = await axios.post('http://localhost:5000/get_ufaces', {
+                    
                 });
                 console.log(res.data); // Debugging: log the response
                 setIds(res.data); // Update state with the fetched IDs
@@ -90,7 +76,7 @@ function Identifiedfaces() {
     const faces = async () => {
         const seen = seen_r;
         try {
-            const res = await axios.post('http://localhost:5000/get_faces', {
+            const res = await axios.post('http://localhost:5000/get_ufaces', {
                 seen,
             });
             console.log(res.data); // Debugging: log the response
@@ -133,12 +119,12 @@ function Identifiedfaces() {
 
 
     const listItems = ids.map(person =>
-        <div className={m_style.div1_class}style={m_style.div1}  >
+        <div className='container border m-2  p-2 id_cards' style={m_style.div1}  >
             <center><img style={m_style.img} src={person.image} /></center>
-            <div style={m_style.div2}><p className='m-2' style={m_style.p} >ID : <b>{person.student_id}</b></p>
-                <p className='m-2' style={m_style.p}>Name : <b>{person.student_name}</b></p></div>
+            <div><p className='m-2' style={m_style.p} >ID : <b>{person.id}</b></p>
+                </div>
 
-            <center><  button className='btn btn-primary m-2 border' style={m_style.btn_style} onClick={() => GetDetails_handler(person)}><img style={m_style.img_display} src='images/forward.png' />{m_style.btn_text}</button></center>
+            <center><button className='btn btn-primary m-2' style={m_style.btn_style} onClick={() => GetDetails_handler(person)}><img style={m_style.img_display} src='images/forward.png' />{m_style.btn_text}</button></center>
 
         </div>
     );
@@ -152,7 +138,7 @@ function Identifiedfaces() {
                     <Sidebar data={loc} />
                 </div>
                 <div className='container w-50 p-3 ' style={{ 'max-height': "800px" }}>
-                    <h1 className='h3'><b>{seen_name} Identified Faces</b></h1>
+                    <h1 className='h3'><b>{seen_name} Unidentified Faces</b></h1>
                     <div className='' style={{ display: 'flex' }}>
                         <button className='btn btn-success mx-1' onClick={() => {
                             handle_seen();
@@ -166,8 +152,6 @@ function Identifiedfaces() {
                             <button className='min_max_buttons' onClick={() => setMstyle(style2)} style={{ backgroundColor: 'transparent' }}><img src='images/maximize.png' style={{ height: "20px" }} /></button>
 
                             <button className='min_max_buttons' onClick={() => setMstyle(style1)} style={{ backgroundColor: 'transparent' }}><img src='images/minimize.png' style={{ height: "20px" }} /></button>
-                            
-                            <button className='min_max_buttons' onClick={() => setMstyle(style3)} style={{ backgroundColor: 'transparent' }}><img src='images/nots.png' style={{ height: "20px" }} /></button>
 
                         </div>
                     </div>
@@ -196,4 +180,4 @@ function Identifiedfaces() {
     )
 }
 
-export default Identifiedfaces
+export default Unidentifiedfaces
