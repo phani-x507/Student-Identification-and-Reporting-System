@@ -66,7 +66,7 @@ def find_face(val):
     dfs = DeepFace.find(
   img_path = val,
   db_path = "C:/Users/offic/OneDrive/Documents/GitHub/Student-Identification-and-Reporting-System/Backend/Faces",
-  
+  enforce_detection='False',
 )
 
 
@@ -246,6 +246,7 @@ def upload_face():
         return str(name[0])
     else:
         return "no it is not post"
+    
     
 if __name__ == '__main__':
     app.run(debug=True)
